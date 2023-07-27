@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSV upload/read</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Add Plotly CSS and JavaScript CDN links -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h1>CSV Upload</h1>
+    
+    {% if error %}
+    <p>{{ error }}</p>
+    {% endif %}
+
+    <form action="/" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="Upload CSV">
+    </form>
+
+    <h2>CSV Library</h2>
+    <form action="{{ url_for('show_data') }}" method="get">
+        <select name="csv">
+            {% for csv in csvs %}
+            <option value="{{ csv }}">{{ csv }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Show Data">
+    </form>
+
+    {% if x_cols and y_cols %}
+    <h2>Generate Graph</h2>
+    <form action="{{ url_for('plot_graph') }}" method="post">
+        <input type="hidden" name="csv" value="{{ filename }}">
+        <div id="graph_buttons">
+            <label for="graph_type">Select Graph Type:</label>
+            <div class="graph_button">
+                <input type="radio" name="graph_type" id="line" value="line">
+                <label for="line"><img src="line_chart_image.jpg" alt="Line Chart"></label>
+            </div>
+            <div class="graph_button">
+                <input type="radio" name="graph_type" id="bar" value="bar">
+                <label for="bar"><img src="bar_chart_image.jpg" alt="Bar Chart"></label>
+            </div>
+            <div class="graph_button">
+                <input type="radio" name="graph_type" id="scatter" value="scatter">
+                <label for="scatter"><img src="scatter_plot_image.jpg" alt="Scatter Plot"></label>
+            </div>
+            <div class="graph_button">
+                <input type="radio" name="graph_type" id="3dscatter" value="3dscatter">
+                <label for="3dscatter"><img src="3dscatter_plot_image.jpg" alt="3D Scatter Plot"></label>
+            </div>
+            <div class="graph_button">
+                <input type="radio" name="graph_type" id="heatmap" value="heatmap">
+                <label for="heatmap"><img src="heatmap_image.jpg" alt="Heatmap"></label>
+            </div>
+            <div class="graph_button">
+                <input type="radio" name="graph_type" id="trend_line" value="trend_line">
+                <label for="trend_line"><img src="trend_line_image.jpg" alt="Trend Line"></label>
+            </div>
+            <div class="graph_button">
+                <input type="radio" name="graph_type" id="box_plot" value="box_plot">
+                <label for="box_plot"><img src="box_plot_image.jpg" alt="Box Plot"></label>
+            </div>
+            <div class="graph_button">
+                <input type="radio" name="graph_type" id="statechloro" value="statechloro">
+                <label for="statechloro"><img src="state_chloropleth_map_image.jpg" alt="State Chloropleth Map"></label>
+            </div>
+            <div class="graph_button">
+                <input type="radio" name="graph_type" id="MLR" value="MLR">
+                <label for="MLR"><img src="mlr_image.jpg" alt="Machine Learning Regression"></label>
+            </div>
+            <div class="graph_button">
+                <input type="radio" name="graph_type" id="c1" value="c1">
+                <label for="c1"><img src="custom_plot_1_image.jpg" alt="Custom Plot 1"></label>
+            </div>
+            <div class="graph_button">
+                <input type="radio" name="graph_type" id="c2" value="c2">
+                <label for="c2"><img src="custom_plot_2_image.jpg" alt="Custom Plot 2"></label>
+            </div>
+            <div class="graph_button">
+                <input type="radio" name="graph_type" id="c3" value="c3">
+                <label for="c3"><img src="custom_plot_3_image.jpg" alt="Custom Plot 3"></label>
+            </div>
+            <div class="graph_button">
+                <input type="radio" name="graph_type" id="c4" value="c4">
+                <label for="c4"><img src="custom_plot_4_image.jpg" alt="Custom Plot 4"></label>
+            </div>
+        </div>
+        <label for="x_axis">Select X-axis:</label>
+        <select name="x_axis" id="x_axis">
+            {% for col in x_cols %}
+            <option value="{{ col }}">{{ col }}</option>
+            {% endfor %}
+        </select>
+        <div></div>
+        <label for="y_axis">Select Y-axis:</label>
+        <select name="y_axis" id="y_axis">
+            {% for col in y_cols %}
+            <option value="{{ col }}">{{ col }}</option>
+            {% endfor %}
+        </select>
+        <div></div>
+        <div id="additional_fields">
+            <label for="z_axis">Select Z-axis (for Heatmap and 3D Scatter Plot):</label>
+            <select name="z_axis" id="z_axis">
+                {% for col in x_cols %}
+                <option value="{{ col }}">{{ col }}</option>
+                {% endfor %}
+            </select>
+            <div></div>
+            <label for="color_axis">Select Color Axis (for 3D Scatter Plot):</label>
+            <select name="color_axis" id="color_axis">
+                {% for col in x_cols %}
+                <option value="{{ col }}">{{ col }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <input type="submit" value="Generate Graph">
+    </form>
+    {% endif %}
+
+    {% if graph %}
+    <h2>Generated Graph</h2>
+    <header></header>
+    <!-- Render the graph using plotly.offline.plot and div element -->
+    <div id="plot">
+        {{ graph | safe }}
+    </div>
+    {% endif %}
+
+    {% if table %}
+    <h2>Table</h2>
+    {{ table|safe }}
+    {% endif %}
+
+</body>
+</html>

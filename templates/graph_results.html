@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Graph Results</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Graph Results</h1>
+    
+    <h2>Line Plot</h2>
+    {{ line_plot|safe }}
+
+    <h2>Bar Plot</h2>
+    {{ bar_plot|safe }}
+
+    <a href="/">Back to Home</a>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.0.0/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.3.0/plotly.min.js"></script>
+</body>
+</html>
